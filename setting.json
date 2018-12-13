@@ -1,0 +1,14 @@
+{
+    "registerList" : [
+        {
+            "senders" : [
+                { "from" : "manhtt@relipasoft.com", "time": "2018-12-05 21:53:59"},
+                { "from" : "manhattan.vn@gmail.com", "time": "2018-11-30 11:51:33"}
+            ],
+            "to": "manhattan.vn@gmail.com",
+            "title": "Greeting",
+            "content" : "emailContent.txt",
+            "attachment": "/User/manhattan/Downloads/"
+        }
+    ]
+}

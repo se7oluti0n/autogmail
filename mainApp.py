@@ -1,17 +1,19 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QListWidget, QListWidgetItem 
-from PyQt5.QtWidgets import QLineEdit, QMessageBox, QInputDialog
+from PyQt5.QtWidgets import QLineEdit, QMessageBox, QInputDialog, QPlainTextEdit, QLabel, QFileDialog
 
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
  
+import os
+
 class App(QWidget):
  
     def __init__(self):
         super().__init__()
         self.title = 'PyQt5 button - pythonspot.com'
-        self.left = 10
-        self.top = 10
+        self.left = 100
+        self.top = 100
         self.width = 720
         self.height = 480
         self.initUI()
@@ -44,6 +46,17 @@ class App(QWidget):
                 item = self.senderList.takeItem(row)
                 del item
 
+    def loadFromObject(self, email):
+        pass
+
+    def selectFile(self):
+        # filePath = QFileDialog(self)
+        filePath, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)")
+        print (filePath)
+        if os.path.isfile(filePath):
+
+            self.attachLabel.setText(os.path.basename(filePath))
+
     def initUI(self):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
@@ -67,6 +80,17 @@ class App(QWidget):
         self.delButton.clicked.connect(self.deleteSender)
 
 
+        # File label 
+        self.attachLabel = QLabel(self)
+        self.attachLabel.setText("File")
+        self.attachLabel.move(20, 210)
+        self.attachLabel.resize(80, 20)
+
+
+        self.fileButton = QPushButton("Them file dinh kem", self)
+        self.fileButton.move(100, 210)
+        self.fileButton.clicked.connect(self.selectFile)
+
         # Create sender list
         self.senderList = QListWidget(self)
         self.senderList.move(320, 20)
@@ -77,10 +101,15 @@ class App(QWidget):
         # create Title edit line
         self.titleTextbox = QLineEdit(self)
         self.titleTextbox.move(20, 20)
-        self.titleTextbox.resize(280,40)
+        self.titleTextbox.resize(280,20)
         # create content text box
 
+        self.contentTextBox = QPlainTextEdit(self)
+        self.contentTextBox.move(320, 240)
+        self.contentTextBox.resize(280, 200)
+
         # attachment label name
+
  
         # connect button to function on_click
         self.button.clicked.connect(self.on_click)

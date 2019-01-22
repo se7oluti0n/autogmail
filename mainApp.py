@@ -56,6 +56,21 @@ class App(QWidget):
         if os.path.isfile(filePath):
 
             self.attachLabel.setText(os.path.basename(filePath))
+            row = self.fileListWidget.currentRow()
+        
+            self.fileListWidget.insertItem(row, os.path.basename(filePath))
+
+    def deleteFile(self):
+        row = self.fileListWidget.currentRow()
+        item = self.fileListWidget.item(row)
+
+        if item is not None:
+            reply = QMessageBox.question(self, "Xoá thư", "Bạn có chắc muốn xoá địa chỉ " + str(item.text()),
+                QMessageBox.Yes | QMessageBox.No )
+            
+            if reply == QMessageBox.Yes:
+                item = self.fileListWidget.takeItem(row)
+                del item
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -87,9 +102,19 @@ class App(QWidget):
         self.attachLabel.resize(80, 20)
 
 
-        self.fileButton = QPushButton("Them file dinh kem", self)
-        self.fileButton.move(100, 210)
-        self.fileButton.clicked.connect(self.selectFile)
+        self.addFileButton = QPushButton("Them file dinh kem", self)
+        self.addFileButton.move(100, 210)
+        self.addFileButton.clicked.connect(self.selectFile)
+
+        self.delFileButton = QPushButton("Xoa file dinh kem", self)
+        self.delFileButton.move(100, 240)
+        self.delFileButton.clicked.connect(self.deleteFile)
+
+        self.fileListWidget = QListWidget(self)
+        self.fileListWidget.move(20, 270)
+
+        self.fileListWidget.show()
+        self.attachments = []
 
         # Create sender list
         self.senderList = QListWidget(self)

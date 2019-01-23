@@ -6,6 +6,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
  
 import os
+from main import EmailInfo, readSetting
 
 class App(QWidget):
  
@@ -46,8 +47,16 @@ class App(QWidget):
                 item = self.senderList.takeItem(row)
                 del item
 
-    def loadFromObject(self, email):
-        pass
+    def loadFromObject(self, emails):
+        row = self.senderList.currentRow()
+
+        self.senderList.addItems([email.sender for email in emails])
+
+        if len(emails) > 0:
+            self.titleTextbox.setText(emails[0].title)
+            self.contentTextBox.setPlainText(emails[0].content)
+            self.recipientTextbox.setText(emails[0].to)
+
 
     def selectFile(self):
         # filePath = QFileDialog(self)
@@ -59,6 +68,7 @@ class App(QWidget):
             row = self.fileListWidget.currentRow()
         
             self.fileListWidget.insertItem(row, os.path.basename(filePath))
+            self.attachments[os.path.basename(filePath)] = filePath
 
     def deleteFile(self):
         row = self.fileListWidget.currentRow()
@@ -70,7 +80,14 @@ class App(QWidget):
             
             if reply == QMessageBox.Yes:
                 item = self.fileListWidget.takeItem(row)
+                self.attachments.pop(item.text(), None)
                 del item
+            
+    def loadData(self):
+        filePath, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)")
+        emails = readSetting(filePath)
+
+        self.loadFromObject(emails)
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -79,8 +96,9 @@ class App(QWidget):
         
  
         # Create a button in the window
-        self.button = QPushButton('Show text', self)
-        self.button.move(20,80)
+        self.loadSettingBtn = QPushButton('Load data', self)
+        self.loadSettingBtn.move(20,80)
+        self.loadSettingBtn.clicked.connect(self.loadData)
 
         self.addButton = QPushButton("Thêm thư", self)
         self.addButton.move(20, 110)
@@ -114,12 +132,11 @@ class App(QWidget):
         self.fileListWidget.move(20, 270)
 
         self.fileListWidget.show()
-        self.attachments = []
+        self.attachments = {}
 
         # Create sender list
         self.senderList = QListWidget(self)
         self.senderList.move(320, 20)
-        self.senderList.addItems(["Hello", "GOodbye"])
         self.senderList.show()
 
         # create to edit line
@@ -127,6 +144,12 @@ class App(QWidget):
         self.titleTextbox = QLineEdit(self)
         self.titleTextbox.move(20, 20)
         self.titleTextbox.resize(280,20)
+
+
+        # create recipient
+        self.recipientTextbox = QLineEdit(self)
+        self.recipientTextbox.move(20, 50)
+        self.recipientTextbox.resize(280,20)
         # create content text box
 
         self.contentTextBox = QPlainTextEdit(self)
@@ -137,7 +160,6 @@ class App(QWidget):
 
  
         # connect button to function on_click
-        self.button.clicked.connect(self.on_click)
         self.show()
  
     @pyqtSlot()

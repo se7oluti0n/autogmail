@@ -2,8 +2,8 @@
     "registerList" : [
         {
             "senders" : [
-                { "from" : "manhtt@relipasoft.com", "time": "2018-12-05 21:53:59"},
-                { "from" : "manhattan.vn@gmail.com", "time": "2018-11-30 11:51:33"}
+                { "from" : "manhtt@relipasoft.com", "time": "2019-01-24 21:18:59"},
+                { "from" : "manhattan.vn@gmail.com", "time": "2019-01-24 21:18:33"}
             ],
             "to": "manhattan.vn@gmail.com",
             "title": "Greeting",

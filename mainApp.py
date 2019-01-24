@@ -6,7 +6,14 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
  
 import os
-from main import EmailInfo, readSetting
+from main import EmailInfo, readSetting, send
+
+import gmail
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.qt import QtScheduler
+from datetime import datetime
+
 
 class App(QWidget):
  
@@ -54,14 +61,10 @@ class App(QWidget):
 
         if len(emails) > 0:
             self.titleTextbox.setText(emails[0].title)
-            content = self.readContent(emails[0].content)
-            print ("Email content:", content)
-            self.contentTextBox.setPlainText(content)
+            self.contentTextBox.setPlainText(emails[0].content)
             self.recipientTextbox.setText(emails[0].to)
 
-    def readContent(self, contentFilePath):
-        with open(contentFilePath, 'r', encoding='utf-8') as f:
-            return f.read()
+
 
 
     def selectFile(self):
@@ -99,7 +102,7 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
  
-        
+        self.scheduler = QtScheduler()
  
         # Create a button in the window
         self.loadSettingBtn = QPushButton('Load data', self)
@@ -185,6 +188,7 @@ class App(QWidget):
 
         senders = []
         times = []
+        
         for i in range(self.senderList.count()):
             text = self.senderList.item(i).text()
             sender, t = text.split(',')
@@ -198,6 +202,31 @@ class App(QWidget):
         print (times)
 
 
+        emails = []
+        for i in range(len(senders)):
+            emails += [EmailInfo(senders[i], recipient, title, content, times[i], attachments)]
+
+        print (emails)
+
+        service = gmail.getService()
+
+        for email in emails:
+            email.createDraft(service, 'me')
+
+        # for email in emails:
+        #     send(service, email)
+
+        
+        # test add scheduler
+        
+
+        for email in emails:
+            time = datetime.strptime(email.time, "%Y-%m-%d %H:%M:%S")
+
+            self.scheduler.add_job(send,'cron',args=(service, email), year=time.year, month=time.month, day=time.day,
+                hour=time.hour, minute=time.minute, second=time.second)
+
+        self.scheduler.start()
 
     @pyqtSlot()
     def on_click(self):

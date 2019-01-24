@@ -4,6 +4,11 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 import json
 from datetime import datetime
 
+
+def readContent(contentFilePath):
+    with open(contentFilePath, 'r', encoding='utf-8') as f:
+        return f.read()
+
 class EmailInfo:
     def __init__(self,sender, to, title, content, time, attach=None):
         self.sender = sender
@@ -14,6 +19,8 @@ class EmailInfo:
         # self.time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
         self.attach = attach
         self.createEmailMessage()
+
+
 
     def createEmailMessage(self):
         if self.attach:
@@ -29,7 +36,7 @@ class EmailInfo:
 
     def __repr__(self):
         return "EmailInfo: " +  self.sender + " " + self.to + " " + self.title +\
-            " " + self.content + " " + self.time.strftime("%Y-%m-%d %H:%M:%S")
+            " " + self.content + " " + self.time
 
 def readSetting(file_name):
     with open(file_name, "r") as read_file:
@@ -40,7 +47,7 @@ def readSetting(file_name):
         print (reg)
         senderList = reg['senders']
         recipient = reg['to']
-        content = reg['content']
+        content = readContent(reg['content'])
         title = reg['title']
 
 

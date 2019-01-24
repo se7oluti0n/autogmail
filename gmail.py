@@ -4,6 +4,9 @@ from httplib2 import Http
 from oauth2client import file, client, tools
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart, MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.audio import MIMEAudio
+
 from mimetypes import MimeTypes
 import base64
 from apiclient import errors

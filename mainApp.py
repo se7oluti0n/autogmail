@@ -16,7 +16,7 @@ class App(QWidget):
         self.left = 100
         self.top = 100
         self.width = 720
-        self.height = 480
+        self.height = 640
         self.initUI()
  
     def addSender(self):
@@ -50,12 +50,18 @@ class App(QWidget):
     def loadFromObject(self, emails):
         row = self.senderList.currentRow()
 
-        self.senderList.addItems([email.sender for email in emails])
+        self.senderList.addItems([email.sender+','+email.time for email in emails])
 
         if len(emails) > 0:
             self.titleTextbox.setText(emails[0].title)
-            self.contentTextBox.setPlainText(emails[0].content)
+            content = self.readContent(emails[0].content)
+            print ("Email content:", content)
+            self.contentTextBox.setPlainText(content)
             self.recipientTextbox.setText(emails[0].to)
+
+    def readContent(self, contentFilePath):
+        with open(contentFilePath, 'r', encoding='utf-8') as f:
+            return f.read()
 
 
     def selectFile(self):
@@ -158,10 +164,41 @@ class App(QWidget):
 
         # attachment label name
 
+        self.sendButton = QPushButton("Đặt lệnh gửi thư", self)
+        self.sendButton.move(300, 500)
+        self.sendButton.clicked.connect(self.sendEmail)
  
         # connect button to function on_click
         self.show()
  
+
+    def sendEmail(self):
+        print ("Send email")
+
+        title = self.titleTextbox.text()
+        recipient = self.recipientTextbox.text()
+        content = self.contentTextBox.toPlainText()
+        
+        attachments = []
+        for i in range(self.fileListWidget.count()):
+            attachments.append(self.attachments[self.fileListWidget.item(i).text()])
+
+        senders = []
+        times = []
+        for i in range(self.senderList.count()):
+            text = self.senderList.item(i).text()
+            sender, t = text.split(',')
+            senders.append(sender)
+            times.append(t)
+
+        print(title, recipient)
+        print (content)
+        print (senders)
+        print (attachments)
+        print (times)
+
+
+
     @pyqtSlot()
     def on_click(self):
         textboxValue = self.textbox.text()

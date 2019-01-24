@@ -11,7 +11,7 @@ class EmailInfo:
         self.title = title
         self.content = content
         self.time = time
-        self.time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+        # self.time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
         self.attach = attach
         self.createEmailMessage()
 

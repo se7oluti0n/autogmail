@@ -14,6 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.qt import QtScheduler
 from datetime import datetime
 
+import logging
 
 class App(QWidget):
  
@@ -102,7 +103,10 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
  
-        self.scheduler = QtScheduler()
+        self.scheduler = QtScheduler(misfire_grace_time=20)
+
+        logging.basicConfig()
+        logging.getLogger('apscheduler').setLevel(logging.DEBUG)
  
         # Create a button in the window
         self.loadSettingBtn = QPushButton('Load data', self)
@@ -145,20 +149,31 @@ class App(QWidget):
 
         # Create sender list
         self.senderList = QListWidget(self)
-        self.senderList.move(320, 20)
+        self.senderList.move(380, 20)
         self.senderList.show()
 
         # create to edit line
         # create Title edit line
+
+        self.attachLabel = QLabel(self)
+        self.attachLabel.setText("Tiêu đề")
+        self.attachLabel.move(20, 20)
+        self.attachLabel.resize(80, 20)
+
         self.titleTextbox = QLineEdit(self)
-        self.titleTextbox.move(20, 20)
-        self.titleTextbox.resize(280,20)
+        self.titleTextbox.move(100, 20)
+        self.titleTextbox.resize(200, 20)
 
 
         # create recipient
+        self.attachLabel = QLabel(self)
+        self.attachLabel.setText("Người nhận")
+        self.attachLabel.move(20, 50)
+        self.attachLabel.resize(80, 20)
+
         self.recipientTextbox = QLineEdit(self)
-        self.recipientTextbox.move(20, 50)
-        self.recipientTextbox.resize(280,20)
+        self.recipientTextbox.move(100, 50)
+        self.recipientTextbox.resize(200, 20)
         # create content text box
 
         self.contentTextBox = QPlainTextEdit(self)

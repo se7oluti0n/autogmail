@@ -6,6 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart, MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.audio import MIMEAudio
+from email import encoders
 
 from mimetypes import MimeTypes
 import base64
@@ -88,6 +89,7 @@ def create_message_with_attachment(
       fp.close()
     filename = os.path.basename(file)
     msg.add_header('Content-Disposition', 'attachment', filename=filename)
+    encoders.encode_base64(msg)
     message.attach(msg)
 
   return {'raw': base64.urlsafe_b64encode(message.as_bytes()).decode('UTF-8')}

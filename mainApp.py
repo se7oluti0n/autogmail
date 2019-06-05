@@ -24,7 +24,7 @@ class App(QWidget):
         self.left = 100
         self.top = 100
         self.width = 720
-        self.height = 640
+        self.height = 720
         self.initUI()
  
     def addSender(self):
@@ -103,7 +103,7 @@ class App(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
  
-        self.scheduler = QtScheduler(misfire_grace_time=20)
+        self.schedulers = []
 
         logging.basicConfig()
         logging.getLogger('apscheduler').setLevel(logging.DEBUG)
@@ -155,10 +155,10 @@ class App(QWidget):
         # create to edit line
         # create Title edit line
 
-        self.attachLabel = QLabel(self)
-        self.attachLabel.setText("Tiêu đề")
-        self.attachLabel.move(20, 20)
-        self.attachLabel.resize(80, 20)
+        self.titleLabel = QLabel(self)
+        self.titleLabel.setText("Tiêu đề")
+        self.titleLabel.move(20, 20)
+        self.titleLabel.resize(80, 20)
 
         self.titleTextbox = QLineEdit(self)
         self.titleTextbox.move(100, 20)
@@ -166,10 +166,10 @@ class App(QWidget):
 
 
         # create recipient
-        self.attachLabel = QLabel(self)
-        self.attachLabel.setText("Người nhận")
-        self.attachLabel.move(20, 50)
-        self.attachLabel.resize(80, 20)
+        self.recipientLabel = QLabel(self)
+        self.recipientLabel.setText("Người nhận")
+        self.recipientLabel.move(20, 50)
+        self.recipientLabel.resize(80, 20)
 
         self.recipientTextbox = QLineEdit(self)
         self.recipientTextbox.move(100, 50)
@@ -185,12 +185,19 @@ class App(QWidget):
         self.sendButton = QPushButton("Đặt lệnh gửi thư", self)
         self.sendButton.move(300, 500)
         self.sendButton.clicked.connect(self.sendEmail)
+
+        # Create sender list
+        self.scheduler_widget = QListWidget(self)
+        self.scheduler_widget.move(50, 540)
+        self.scheduler_widget.show()
  
         # connect button to function on_click
         self.show()
  
 
     def sendEmail(self):
+
+        current_scheduler = QtScheduler(misfire_grace_time=20)
         print ("Send email")
 
         title = self.titleTextbox.text()
@@ -210,7 +217,7 @@ class App(QWidget):
             senders.append(sender)
             times.append(t)
 
-        print(title, recipient)
+        print (title, recipient)
         print (content)
         print (senders)
         print (attachments)
@@ -234,14 +241,23 @@ class App(QWidget):
         
         # test add scheduler
         
+        text = ""
 
         for email in emails:
             time = datetime.strptime(email.time, "%Y-%m-%d %H:%M:%S")
 
-            self.scheduler.add_job(send,'cron',args=(service, email), year=time.year, month=time.month, day=time.day,
+            current_scheduler.add_job(send,'cron',args=(service, email), year=time.year, month=time.month, day=time.day,
                 hour=time.hour, minute=time.minute, second=time.second)
 
-        self.scheduler.start()
+            text += email.time
+            text += ","
+    
+        current_scheduler.start()
+
+        row = self.scheduler_widget.currentRow()
+        self.scheduler_widget.insertItem(row, text)
+        self.schedulers += [current_scheduler]
+
 
     @pyqtSlot()
     def on_click(self):

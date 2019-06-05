@@ -23,8 +23,8 @@ class App(QWidget):
         self.title = 'PyQt5 button - pythonspot.com'
         self.left = 100
         self.top = 100
-        self.width = 720
-        self.height = 720
+        self.width = 800
+        self.height = 640
         self.initUI()
  
     def addSender(self):
@@ -43,6 +43,7 @@ class App(QWidget):
                 QLineEdit.Normal, item.text())
             if ok and text is not None:
                 item.setText(text)
+
     def deleteSender(self):
         row = self.senderList.currentRow()
         item = self.senderList.item(row)
@@ -65,16 +66,11 @@ class App(QWidget):
             self.contentTextBox.setPlainText(emails[0].content)
             self.recipientTextbox.setText(emails[0].to)
 
-
-
-
     def selectFile(self):
         # filePath = QFileDialog(self)
         filePath, _ = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)")
         print (filePath)
         if os.path.isfile(filePath):
-
-            self.attachLabel.setText(os.path.basename(filePath))
             row = self.fileListWidget.currentRow()
         
             self.fileListWidget.insertItem(row, os.path.basename(filePath))
@@ -110,85 +106,84 @@ class App(QWidget):
  
         # Create a button in the window
         self.loadSettingBtn = QPushButton('Load data', self)
-        self.loadSettingBtn.move(20,80)
+        self.loadSettingBtn.move(20,20)
         self.loadSettingBtn.clicked.connect(self.loadData)
 
         self.addButton = QPushButton("Thêm thư", self)
-        self.addButton.move(20, 110)
+        self.addButton.move(120, 20)
         self.addButton.clicked.connect(self.addSender)
 
         self.editButton = QPushButton("Sửa thư", self)
-        self.editButton.move(20, 140)
+        self.editButton.move(220, 20)
         self.editButton.clicked.connect(self.editSender)
 
         self.delButton = QPushButton("Xoá thư", self)
-        self.delButton.move(20, 170)
+        self.delButton.move(320, 20)
         self.delButton.clicked.connect(self.deleteSender)
-
-
-        # File label 
-        self.attachLabel = QLabel(self)
-        self.attachLabel.setText("File")
-        self.attachLabel.move(20, 210)
-        self.attachLabel.resize(80, 20)
-
-
-        self.addFileButton = QPushButton("Them file dinh kem", self)
-        self.addFileButton.move(100, 210)
-        self.addFileButton.clicked.connect(self.selectFile)
-
-        self.delFileButton = QPushButton("Xoa file dinh kem", self)
-        self.delFileButton.move(100, 240)
-        self.delFileButton.clicked.connect(self.deleteFile)
-
-        self.fileListWidget = QListWidget(self)
-        self.fileListWidget.move(20, 270)
-
-        self.fileListWidget.show()
-        self.attachments = {}
 
         # Create sender list
         self.senderList = QListWidget(self)
-        self.senderList.move(380, 20)
+        self.senderList.move(20, 50)
+        self.senderList.resize(400, 70)
         self.senderList.show()
 
-        # create to edit line
+                # create to edit line
         # create Title edit line
 
         self.titleLabel = QLabel(self)
         self.titleLabel.setText("Tiêu đề")
-        self.titleLabel.move(20, 20)
+        self.titleLabel.move(20, 130)
         self.titleLabel.resize(80, 20)
 
         self.titleTextbox = QLineEdit(self)
-        self.titleTextbox.move(100, 20)
-        self.titleTextbox.resize(200, 20)
+        self.titleTextbox.move(100, 130)
+        self.titleTextbox.resize(500, 20)
 
 
         # create recipient
         self.recipientLabel = QLabel(self)
         self.recipientLabel.setText("Người nhận")
-        self.recipientLabel.move(20, 50)
+        self.recipientLabel.move(20, 160)
         self.recipientLabel.resize(80, 20)
 
         self.recipientTextbox = QLineEdit(self)
-        self.recipientTextbox.move(100, 50)
-        self.recipientTextbox.resize(200, 20)
+        self.recipientTextbox.move(100, 160)
+        self.recipientTextbox.resize(500, 20)
+
+        self.addFileButton = QPushButton("Them file dinh kem", self)
+        self.addFileButton.move(440, 20)
+        self.addFileButton.clicked.connect(self.selectFile)
+
+        self.delFileButton = QPushButton("Xoa file dinh kem", self)
+        self.delFileButton.move(600, 20)
+        self.delFileButton.clicked.connect(self.deleteFile)
+
+        self.fileListWidget = QListWidget(self)
+        self.fileListWidget.move(440, 50)
+        self.fileListWidget.resize(300, 50)
+        self.fileListWidget.show()
+        self.attachments = {}
+
         # create content text box
+        # create recipient
+        self.contentLabel = QLabel(self)
+        self.contentLabel.setText("Nội dung")
+        self.contentLabel.move(20, 190)
+        self.contentLabel.resize(80, 20)
 
         self.contentTextBox = QPlainTextEdit(self)
-        self.contentTextBox.move(320, 240)
-        self.contentTextBox.resize(280, 200)
+        self.contentTextBox.move(20, 220)
+        self.contentTextBox.resize(700, 200)
 
         # attachment label name
-
         self.sendButton = QPushButton("Đặt lệnh gửi thư", self)
-        self.sendButton.move(300, 500)
+        self.sendButton.move(20, 440)
         self.sendButton.clicked.connect(self.sendEmail)
 
         # Create sender list
         self.scheduler_widget = QListWidget(self)
-        self.scheduler_widget.move(50, 540)
+        self.scheduler_widget.move(20, 480)
+        self.scheduler_widget.resize(400, 100)
         self.scheduler_widget.show()
  
         # connect button to function on_click

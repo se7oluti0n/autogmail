@@ -23,7 +23,7 @@ class App(QWidget):
         self.title = 'PyQt5 button - pythonspot.com'
         self.left = 100
         self.top = 100
-        self.width = 800
+        self.width = 780
         self.height = 640
         self.initUI()
  
@@ -124,7 +124,7 @@ class App(QWidget):
         # Create sender list
         self.senderList = QListWidget(self)
         self.senderList.move(20, 50)
-        self.senderList.resize(400, 70)
+        self.senderList.resize(400, 100)
         self.senderList.show()
 
                 # create to edit line
@@ -132,22 +132,22 @@ class App(QWidget):
 
         self.titleLabel = QLabel(self)
         self.titleLabel.setText("Tiêu đề")
-        self.titleLabel.move(20, 130)
+        self.titleLabel.move(20, 160)
         self.titleLabel.resize(80, 20)
 
         self.titleTextbox = QLineEdit(self)
-        self.titleTextbox.move(100, 130)
+        self.titleTextbox.move(100, 160)
         self.titleTextbox.resize(500, 20)
 
 
         # create recipient
         self.recipientLabel = QLabel(self)
         self.recipientLabel.setText("Người nhận")
-        self.recipientLabel.move(20, 160)
+        self.recipientLabel.move(20, 185)
         self.recipientLabel.resize(80, 20)
 
         self.recipientTextbox = QLineEdit(self)
-        self.recipientTextbox.move(100, 160)
+        self.recipientTextbox.move(100, 185)
         self.recipientTextbox.resize(500, 20)
 
         self.addFileButton = QPushButton("Them file dinh kem", self)
@@ -160,7 +160,7 @@ class App(QWidget):
 
         self.fileListWidget = QListWidget(self)
         self.fileListWidget.move(440, 50)
-        self.fileListWidget.resize(300, 50)
+        self.fileListWidget.resize(300, 100)
         self.fileListWidget.show()
         self.attachments = {}
 
@@ -168,21 +168,21 @@ class App(QWidget):
         # create recipient
         self.contentLabel = QLabel(self)
         self.contentLabel.setText("Nội dung")
-        self.contentLabel.move(20, 190)
+        self.contentLabel.move(20, 230)
         self.contentLabel.resize(80, 20)
 
         self.contentTextBox = QPlainTextEdit(self)
-        self.contentTextBox.move(20, 220)
+        self.contentTextBox.move(20, 250)
         self.contentTextBox.resize(700, 200)
 
         # attachment label name
         self.sendButton = QPushButton("Đặt lệnh gửi thư", self)
-        self.sendButton.move(20, 440)
+        self.sendButton.move(20, 470)
         self.sendButton.clicked.connect(self.sendEmail)
 
         # Create sender list
         self.scheduler_widget = QListWidget(self)
-        self.scheduler_widget.move(20, 480)
+        self.scheduler_widget.move(20, 510)
         self.scheduler_widget.resize(400, 100)
         self.scheduler_widget.show()
  
